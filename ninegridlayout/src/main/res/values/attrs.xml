@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NineGrid">
+        <attr name="child_space" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="FourGrid">
+        <attr name="four_grid_space" format="dimension" />
+    </declare-styleable>
+</resources>
