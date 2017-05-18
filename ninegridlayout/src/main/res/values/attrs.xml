@@ -4,7 +4,4 @@
         <attr name="child_space" format="dimension" />
     </declare-styleable>
 
-    <declare-styleable name="FourGrid">
-        <attr name="four_grid_space" format="dimension" />
-    </declare-styleable>
 </resources>

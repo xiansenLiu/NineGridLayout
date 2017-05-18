@@ -20,10 +20,10 @@ import java.util.Observer;
  * Time       17:22.
  */
 
-public class NineGrid extends ViewGroup implements Observer {
+    public class NineGrid extends ViewGroup implements Observer {
     private static final String TAG = "NineGrid";
-    private NineGridAdapter mAdapter;
-    private ArrayList<BaseVH> mHolderPool = new ArrayList<>();
+        private NineGridAdapter mAdapter;
+        private ArrayList<BaseVH> mHolderPool = new ArrayList<>();
 
 
     private static final int STATE_MEASURING = 0;
@@ -31,7 +31,7 @@ public class NineGrid extends ViewGroup implements Observer {
     private static final int STATE_RESUME = 2;
     private static int[] STATE = {STATE_MEASURING, STATE_LAYOUTTING, STATE_RESUME};
 
-
+    private boolean match_one = true;
     private int mSpace = 0;
     private int mChildWidth = 0;
     private int mChildHeight = 0;
@@ -84,7 +84,7 @@ public class NineGrid extends ViewGroup implements Observer {
 
     private void onNineGridMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec) - getPaddingStart() - getPaddingEnd();
-        int height = 0;
+        int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
 //        mChildCount = mAdapter.getItemCount();
 //        Log.i(TAG, "onNineGridMeasure: " + mChildCount);
         if (mChildCount <= 0) {
@@ -92,9 +92,14 @@ public class NineGrid extends ViewGroup implements Observer {
             return;
         }
         if (mChildCount == 1) {
-            width = width / 3;
-            mChildWidth = width;
-            height = mChildWidth;
+            if (match_one) {
+                mChildWidth = width;
+                mChildHeight = height;
+            } else {
+                width = width / 3;
+                mChildWidth = width;
+                height = mChildWidth;
+            }
         } else {
             mChildWidth = (width - mSpace * 2) / 3;
             if (mChildCount >= 2 && mChildCount <= 4) {
@@ -114,7 +119,10 @@ public class NineGrid extends ViewGroup implements Observer {
 
         int finalWidth = getAppropriateSize(widthMeasureSpec, width + getPaddingLeft() + getPaddingRight());
         int finalHeight = getAppropriateSize(heightMeasureSpec, height + getPaddingTop() + getPaddingBottom());
-//        Log.i(TAG, "onNineGridMeasure: finalWidth = " + finalWidth + " finalHeight = " + finalHeight);
+        if (mChildCount == 1) {
+            mChildHeight = finalHeight;
+        }
+        Log.i(TAG, "onNineGridMeasure: finalWidth = " + finalWidth + " finalHeight = " + finalHeight);
         setMeasuredDimension(finalWidth, finalHeight);
     }
 
@@ -123,15 +131,15 @@ public class NineGrid extends ViewGroup implements Observer {
         int result = 0;
         switch (mode) {
             case MeasureSpec.UNSPECIFIED:
-//                Log.i(TAG, "getAppropriateSize: UNSPECIFIED");
+                Log.i(TAG, "getAppropriateSize: UNSPECIFIED");
                 result = size;
                 break;
             case MeasureSpec.EXACTLY:
-//                Log.i(TAG, "getAppropriateSize: EXACTLY");
+                Log.i(TAG, "getAppropriateSize: EXACTLY");
                 result = MeasureSpec.getSize(spec);
                 break;
             case MeasureSpec.AT_MOST:
-//                Log.i(TAG, "getAppropriateSize: AT_MOST");
+                Log.i(TAG, "getAppropriateSize: AT_MOST");
                 result = Math.min(size, MeasureSpec.getSize(spec));
                 break;
         }
@@ -178,9 +186,14 @@ public class NineGrid extends ViewGroup implements Observer {
             int childLeft = getPaddingLeft() + (mChildWidth + mSpace) * (colIndex);
             int childTop = getPaddingTop() + (mChildWidth + mSpace) * (rowIndex);
             int childRight = childLeft + mChildWidth;
-            int childBottom = childTop + mChildWidth;
+            int childBottom;
+            if (mChildCount == 1) {
+                childBottom = childTop + mChildHeight;
+            } else {
+                childBottom = childTop + mChildWidth;
+            }
 //            Log.i(TAG, "onNineGridLayout: ");
-//            Log.i(TAG, "onNineGridLayout: child " + i + " layout " + "childLeft = " + childLeft + " childTop = " + childTop + " childRight = " + childRight + " childBottom = " + childBottom);
+            Log.i(TAG, "onNineGridLayout: child " + i + " layout " + "childLeft = " + childLeft + " childTop = " + childTop + " childRight = " + childRight + " childBottom = " + childBottom);
             child.layout(childLeft, childTop, childRight, childBottom);
         }
     }
