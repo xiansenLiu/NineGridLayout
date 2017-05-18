@@ -93,9 +93,9 @@ public class NineGridView extends ViewGroup implements Observer {
 
         int totalHeight = getTotalHeight();
         int finalWidth = getAppropriateSize(widthMeasureSpec, width + getPaddingLeft() + getPaddingRight());
-        Log.i(TAG, "onNineGridMeasure: " + totalHeight);
+//        Log.i(TAG, "onNineGridMeasure: " + totalHeight);
         int finalHeight = getAppropriateSize(heightMeasureSpec, totalHeight + getPaddingTop() + getPaddingBottom());
-        Log.i(TAG, "onNineGridMeasure: " + finalHeight);
+//        Log.i(TAG, "onNineGridMeasure: " + finalHeight);
         setMeasuredDimension(finalWidth, finalHeight);
     }
 
@@ -169,7 +169,7 @@ public class NineGridView extends ViewGroup implements Observer {
                 return;
             }
             int[] position = generateChildPosition(i);
-            Log.e(TAG, "onNineGridLayout: " + i + "--" + position[0] + "-" + position[1] + "-" + position[2] + "-" + position[3]);
+//            Log.e(TAG, "onNineGridLayout: " + i + "--" + position[0] + "-" + position[1] + "-" + position[2] + "-" + position[3]);
             child.layout(position[0], position[1], position[2], position[3]);
         }
 
